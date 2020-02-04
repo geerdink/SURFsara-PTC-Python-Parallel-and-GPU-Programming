@@ -188,4 +188,24 @@ Benefits of Send vs send: faster, good for numpy arrays.
 # 4-2-2020
 ===============================
 
-Numba
+PyCuda basics
+
+running on Lisa; https://jupyter2.lisa.surfsara.nl/
+
+Python 3.6.6 
+
+from pycuda import gpuarray
+
+The CUDA _kernel_ is the elementary function of parallelization. It features an extended C syntax and is the unit of computation that runs in parallel on the thousands of cores that compose a GPU. The kernel can be of one of the following tyes.
+- global - denotes general CUDA kernel. These functions are called from the host
+- device - represents a device (GPU) function. - These functions can be called either from device or global
+- host - represents a host (CPU) function.
+
+## Parallelizatino
+Each time a kernel is called it is necessary to give it a thread distribution (or threads) which are organized in blocks (blocks) and these in turn in a grid (these can have different dimensions: 1D, 2D, 3D). These threads are copies of the kernel and each is a process to be carried out on the GPU cores, i.e. if we launch a grid with 5 blocks (gridDim = (5,1,1)) with 10 threads per block (blockDim = (10,1,1)), then we will have launched 50 tasks in parallel. Although the kernels to be executed by the threads are copies of the one that we originally wrote, the differentiation is given by the assignment of a counter to each process. The usual way to determine this ** global process index ** is exemplified below:
+
+## PyCUDA
+This Python library lets you access Nvidia‘s CUDA parallel computation API from Python. It allows us in principle to do everything we can do with CUDA C, but in a simpler way. One of the virtues of PyCUDA is that is allows us to use the class GPUArray, which in turn allows us to easily manage memory, assign of values, perform data transfer between CPU and GPU, etc. This class of pyCUDA maintains the same structure as the numpy library, giving developers the same feel as they were using numpy.
+
+After initializing the context of pyCUDA we can make use of the class GPUArray. The simplest way to generate an array in the global memory of the GPU is through gpuarray.togpu (), where the value that is passed to the function is a numpy array. Although all GPU global memory arrays are linear arrays, the GPUArray class handles the possibility of preserving array dimensions.
+
